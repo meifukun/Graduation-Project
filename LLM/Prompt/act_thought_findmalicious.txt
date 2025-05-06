@@ -1,0 +1,107 @@
+# Definition: 
+Your task is to identify malicious payloads in an malicious HTTP request. The HTTP request will be divided into minimal semantic units (MSUs), and the input is an array of strings where each string represents an MSU of the HTTP request.
+
+# Output Format: 
+1. First, output a dictionary in JSON format where the key is a string from the input array, and the value is either 0 or 1. A value of 0 indicates that the unit does not contain a malicious payload, and a value of 1 indicates that the unit contains a malicious payload.
+
+2. Then, extract the MSUs with a value of 1, and identify the core attack payload within each of them. The final result should be presented under "Final Answer:". If there are multiple malicious MSUs, concatenate their core attack payloads together.
+
+# Example1: 
+## Input:
+[
+  "POST",
+  "/tienda1",
+  "/miembros",
+  "/editar.jsp",
+  "modo=insertar",
+  "login=ase",
+  "password=8nca58z48",
+  "nombre=Doncel",
+  "apellidos=Medeiros Abel",
+  "email=sheer_prins@meneamex.ar",
+  "dni=29283698Y<svg xmlns=\"http://www.w3.org/2000/svg\" onload=\"alert(document.domain)\"/>",
+  "direccion=Pasaje Gabriel Lodares, 120, ",
+  "ciudad=Garrobo, El",
+  "cp=10261",
+  "provincia=Pontevedra",
+  "ntc=3764289357675438",
+  "B1=Registrar"
+]
+
+## Output:
+{
+  "POST": 0,
+  "/tienda1": 0,
+  "/miembros": 0,
+  "/editar.jsp": 0,
+  "modo=insertar": 0,
+  "login=ase": 0,
+  "password=8nca58z48": 0,
+  "nombre=Doncel": 0,
+  "apellidos=Medeiros Abel": 0,
+  "email=sheer_prins@meneamex.ar": 0,
+  "dni=29283698Y<svg xmlns=\"http://www.w3.org/2000/svg\" onload=\"alert(document.domain)\"/>": 1,
+  "direccion=Pasaje Gabriel Lodares, 120, ": 0,
+  "ciudad=Garrobo, El": 0,
+  "cp=10261": 0,
+  "provincia=Pontevedra": 0,
+  "ntc=3764289357675438": 0,
+  "B1=Registrar": 0
+}
+
+Final Answer: <svg xmlns=\"http://www.w3.org/2000/svg\" onload=\"alert(document.domain)\"/>
+
+
+# Example2: 
+## Input:
+[
+  "POST",
+  "/tienda1",
+  "/..",
+  "/..",
+  "boot.ini",
+  "vaciar.jsp",
+  "B2=Vaciar+carrito",
+  "nombre=Doncel"
+]
+
+## Output:
+{
+  "POST": 0,
+  "/tienda1": 0,
+  "/..": 1,
+  "/..": 1,
+  "boot.ini": 1,
+  "vaciar.jsp": 0,
+  "B2=Vaciar+carrito": 0,
+  "nombre=Doncel": 0
+}
+
+Final Answer: /../../boot.ini
+
+
+# Example3: 
+## Input:
+[
+  "GET",
+  "publico",
+  "anadir.jsp.jhtml",
+  "id=3",
+  "precio=1381",
+  "cantidad=12",
+  "B1=Entrar"
+]
+
+## Output:
+{
+  "GET": 0,
+  "publico": 0,
+  "anadir.jsp.jhtml": 1,
+  "id=3": 0,
+  "precio=1381": 0,
+  "cantidad=12": 0,
+  "B1=Entrar": 0
+}
+
+Final Answer: anadir.jsp.jhtml
+

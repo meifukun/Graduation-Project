@@ -1,0 +1,26 @@
+# Task:  
+You are a cybersecurity expert tasked with generating WAF rules (in SecLang syntax) to block malicious HTTP payloads. Based on a cluster of similar malicious payloads, your goal is to create a regex pattern that generalizes the common attack patterns while allowing variable parts.  
+
+# Input:  
+A list of malicious payload strings from the same cluster (e.g., `["<script>alert(1)</script>", "<script>prompt('XSS')</script>"]`).  
+
+# Output:  
+- A regex pattern in lowercase for the `@rx` operator in SecLang.  
+- If the input payloads are non-malicious, too diverse, or no clear pattern exists, return `"No valid pattern extracted."`  
+- Output only a regex pattern or "No valid pattern extracted."
+
+# Requirements:  
+1. **Pattern Extraction**:  
+   - Identify **fixed segments** (common substrings across all payloads).  
+   - Replace **variable segments** (parts that differ between payloads) with `.*` (Kleene star operator).  
+   - Example: For `["admin' OR 1=1--", "user' OR 1=1--"]`, output `.*' OR 1=1--`.  
+
+2. **Avoid Over-Generalization**:  
+   - Ensure the regex does not match benign requests (e.g., avoid patterns like `.*` alone).  
+   - Prioritize specificity for critical attack indicators (e.g., SQL keywords like `UNION`, `SELECT`).  
+
+3. **Edge Cases**:  
+   - If input payloads are irrelevant (e.g., `["/index.html", "/style.css"]`), return `"No valid pattern extracted."`.  
+
+# Input
+{malicious_cluster}

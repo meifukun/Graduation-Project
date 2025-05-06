@@ -1,0 +1,22 @@
+Analyze the provided malicious HTTP request to identify its attack category.
+
+The input HTTP request will be in JSON format, containing three parts: `method`, `URL`, and `body`.
+
+The possible categories are:
+- Normal
+- Cross-site Scripting (XSS)
+- SQL Injection
+- XML Injection
+- Remote Code Execution (RCE)
+- OS Command Injection
+- LDAP Injection
+- Path Traversal
+- Forced Browsing
+- Others (i.e., the request does not belong to any category above)
+
+# Output Format:
+1. First provide an analysis observed in the requests (e.g., SQL statements, suspicious payloads) to facilitate accurate classification.
+2. Conclude with the final classification on a separate line, structured as: "Final Classification: classified category", such as "Final Classification: SQL Injection"
+
+# Input request 
+{input_text}
